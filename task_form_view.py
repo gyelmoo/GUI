@@ -51,8 +51,7 @@ class TaskFormMixin:
         elif self.db.count_plant_tasks(uid, pid, editing_task_id) == 0:
             return None
         if plant_name and plant_name.lower() != existing["plant_name"].lower():
-            return (f"Plant ID '{pid}' already belongs to '{existing['plant_name']}'. "
-                    "Choose a different ID.")
+            return ("This Plant ID is already taken.")
         return None
 
     def render_add_task(self):
