@@ -32,7 +32,7 @@ pip install -r requirements.txt
 python main.py
 ```
 
-The database (`plant\_care.db`) is created automatically on first run. Create an account on the login screen to begin.
+The database (`plant_care.db`) is created automatically on first run. Create an account on the login screen to begin.
 
 ## Project structure
 
