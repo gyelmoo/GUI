@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+plant_care.db
+avatars/
+plant_photos/
+.DS_Store
