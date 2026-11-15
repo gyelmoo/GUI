@@ -1,5 +1,6 @@
 """Reminder checks, pop-up and alert sound."""
 
+import os
 import threading
 import tkinter as tk
 from datetime import date
@@ -118,8 +119,20 @@ class ReminderMixin:
         beeps = [(880, 180), (1175, 180), (880, 220)] if severe else [(880, 220)]
         if winsound is not None:                       # Windows
             def worker():
-                for freq, ms in beeps:
-                    winsound.Beep(freq, ms)
+                # Urgent / overdue -> Windows alarm sound (change Alarm02 to Alarm01...Alarm10
+                # to pick another). Normal reminders -> the gentle notification sound.
+                media = os.path.join(os.environ.get("WINDIR", r"C:\Windows"), "Media")
+                wav = os.path.join(media, "Alarm02.wav" if severe
+                                   else "Windows Notify System Generic.wav")
+                try:
+                    if os.path.exists(wav):
+                        winsound.PlaySound(wav, winsound.SND_FILENAME)
+                    else:
+                        winsound.PlaySound("SystemHand" if severe else "SystemExclamation",
+                                           winsound.SND_ALIAS)
+                except Exception:
+                    for freq, ms in beeps:
+                        winsound.Beep(freq, ms)
             threading.Thread(target=worker, daemon=True).start()
         else:                                          # macOS / Linux fallback
             for i in range(len(beeps)):
